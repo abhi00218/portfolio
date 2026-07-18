@@ -157,7 +157,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # Media files (user uploads: profile photo, resume, project images/docs)
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
