@@ -7,3 +7,5 @@ dj-database-url>=2.3
 # Only needed if you connect a Postgres database on Render (optional).
 # Uncomment the line below before deploying if you add one:
 psycopg[binary]>=3.1
+django-cloudinary-storage>=0.3.0
+cloudinary>=1.41
