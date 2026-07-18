@@ -158,6 +158,8 @@ STORAGES = {
     },
 }
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+WHITENOISE_USE_FINDERS = True
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Media files (user uploads: profile photo, resume, project images/docs)
 MEDIA_URL = '/media/'
