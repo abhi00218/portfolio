@@ -1,7 +1,7 @@
 Django>=6.0,<7.0
 Pillow>=11.0
 gunicorn>=23.0
-whitenoise>=6.7
+whitenoise==6.8.2
 dj-database-url>=2.3
 
 # Only needed if you connect a Postgres database on Render (optional).
