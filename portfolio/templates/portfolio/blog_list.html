@@ -1,0 +1,87 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block title %}Blog &mdash; {{ profile.full_name|default:"Portfolio" }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Start -->
+<div class="slider-area">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap">
+                        <h2>Blog Area</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'blog_list' %}">Blog</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<section class="blog_area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mb-5 mb-lg-0">
+                <div class="blog_left_sidebar">
+                    {% for post in posts %}
+                    <article class="blog_item">
+                        <div class="blog_item_img">
+                            {% if post.image %}
+                            <img class="card-img rounded-0" src="{{ post.image.url }}" alt="{{ post.title }}">
+                            {% else %}
+                            <img class="card-img rounded-0" src="{% static 'master/assets/img/blog/single_blog_1.png' %}" alt="{{ post.title }}">
+                            {% endif %}
+                            <a href="{{ post.get_absolute_url }}" class="blog_item_date">
+                                <h3>{{ post.created_at|date:"d" }}</h3>
+                                <p>{{ post.created_at|date:"M" }}</p>
+                            </a>
+                        </div>
+                        <div class="blog_details">
+                            <a class="d-inline-block" href="{{ post.get_absolute_url }}">
+                                <h2>{{ post.title }}</h2>
+                            </a>
+                            <p>{{ post.content|striptags|truncatewords:30 }}</p>
+                            <ul class="blog-info-link">
+                                <li><a href="{{ post.get_absolute_url }}"><i class="fa fa-user"></i> {{ profile.full_name|default:"Admin" }}</a></li>
+                                <li><a href="{{ post.get_absolute_url }}"><i class="fa fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}</a></li>
+                            </ul>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <p class="empty-state">No blog posts yet. New posts will appear here.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget author_widget">
+                        <div class="text-center">
+                            {% if profile.profile_image %}
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.full_name }}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:15px;">
+                            {% endif %}
+                            <h4 class="widget_title" style="text-align:center;margin-bottom:8px;">{{ profile.full_name|default:"Author" }}</h4>
+                            <p style="color:#57667e;font-size:14px;">{{ profile.tagline|default:"" }}</p>
+                        </div>
+                    </aside>
+
+                    <aside class="single_sidebar_widget post_category_widget">
+                        <h4 class="widget_title">Get In Touch</h4>
+                        <p style="color:#57667e;font-size:14px;margin-bottom:20px;">Have a question about one of these posts?</p>
+                        <a href="{% url 'contact' %}" class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" style="text-align:center;display:block;">Contact Me</a>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

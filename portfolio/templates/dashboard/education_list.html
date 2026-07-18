@@ -1,0 +1,30 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Education{% endblock %}
+{% block content %}
+<div class="dash-topbar">
+  <h1>Education</h1>
+  <a href="{% url 'dashboard_education_add' %}" class="btn btn-primary">+ Add Education</a>
+</div>
+<div class="panel">
+  {% if object_list %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Degree</th><th>Institution</th><th>Duration</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for edu in object_list %}
+      <tr>
+        <td>{{ edu.degree }}</td>
+        <td>{{ edu.institution }}</td>
+        <td>{{ edu.start_date|date:"Y" }} — {% if edu.currently_studying %}Present{% else %}{{ edu.end_date|date:"Y" }}{% endif %}</td>
+        <td class="actions">
+          <a href="{% url 'dashboard_education_edit' edu.pk %}" class="btn btn-outline btn-sm">Edit</a>
+          <a href="{% url 'dashboard_education_delete' edu.pk %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state">No education entries yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Blog Post Form{% endblock %}
+{% block content %}
+<div class="dash-topbar"><h1>{% if object %}Edit{% else %}Add{% endif %} Blog Post</h1></div>
+<div class="panel">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<div class="alert alert-error">{{ field.errors.0 }}</div>{% endif %}
+      {% if field.name == 'image' and form.instance.image %}
+        <img src="{{ form.instance.image.url }}" style="width:120px;border-radius:8px;margin-top:8px;">
+      {% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'dashboard_blog' %}" class="btn btn-outline">Cancel</a>
+  </form>
+</div>
+{% endblock %}

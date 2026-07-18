@@ -1,0 +1,30 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="dash-topbar"><h1>Profile / About</h1></div>
+<div class="panel">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<small style="color:var(--text-muted);">{{ field.help_text }}</small>{% endif %}
+      {% if field.errors %}<div class="alert alert-error">{{ field.errors.0 }}</div>{% endif %}
+      {% if field.name == 'profile_image' and form.instance.profile_image %}
+        <img src="{{ form.instance.profile_image.url }}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-top:8px;">
+      {% endif %}
+      {% if field.name == 'resume_file' and form.instance.resume_file %}
+        <div style="margin-top:8px;font-size:0.85rem;">
+          Current file: {{ form.instance.resume_file.name }} &mdash;
+          <a href="#" class="js-doc-view" data-file-url="{{ form.instance.resume_file.url }}" data-file-name="{{ form.instance.full_name }} - Resume"><i class="fas fa-eye"></i> View</a>
+          &middot;
+          <a href="{{ form.instance.resume_file.url }}" download><i class="fas fa-download"></i> Download</a>
+        </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+</div>
+{% endblock %}

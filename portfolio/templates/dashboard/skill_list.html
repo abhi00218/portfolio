@@ -1,0 +1,31 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Skills{% endblock %}
+{% block content %}
+<div class="dash-topbar">
+  <h1>Skills</h1>
+  <a href="{% url 'dashboard_skill_add' %}" class="btn btn-primary">+ Add Skill</a>
+</div>
+<div class="panel">
+  {% if object_list %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Name</th><th>Category</th><th>Proficiency</th><th>Order</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for skill in object_list %}
+      <tr>
+        <td>{{ skill.name }}</td>
+        <td>{{ skill.get_category_display }}</td>
+        <td>{{ skill.proficiency }}%</td>
+        <td>{{ skill.order }}</td>
+        <td class="actions">
+          <a href="{% url 'dashboard_skill_edit' skill.pk %}" class="btn btn-outline btn-sm">Edit</a>
+          <a href="{% url 'dashboard_skill_delete' skill.pk %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state">No skills added yet. Click "Add Skill" to get started.</div>
+  {% endif %}
+</div>
+{% endblock %}

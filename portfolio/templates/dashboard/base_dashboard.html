@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Dashboard{% endblock %} · Admin Panel</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/dynamic.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="dash-wrapper">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">admin@portfolio</div>
+    <a href="{% url 'dashboard_home' %}" class="{% if request.resolver_match.url_name == 'dashboard_home' %}active{% endif %}">Overview</a>
+    <a href="{% url 'dashboard_profile' %}" class="{% if request.resolver_match.url_name == 'dashboard_profile' %}active{% endif %}">Profile / About</a>
+    <a href="{% url 'dashboard_skills' %}" class="{% if 'skill' in request.resolver_match.url_name %}active{% endif %}">Skills</a>
+    <a href="{% url 'dashboard_projects' %}" class="{% if 'project' in request.resolver_match.url_name %}active{% endif %}">Projects</a>
+    <a href="{% url 'dashboard_experience' %}" class="{% if 'experience' in request.resolver_match.url_name %}active{% endif %}">Experience</a>
+    <a href="{% url 'dashboard_education' %}" class="{% if 'education' in request.resolver_match.url_name %}active{% endif %}">Education</a>
+    <a href="{% url 'dashboard_blog' %}" class="{% if 'blog' in request.resolver_match.url_name %}active{% endif %}">Blog Posts</a>
+    <a href="{% url 'dashboard_messages' %}" class="{% if 'message' in request.resolver_match.url_name %}active{% endif %}">Messages</a>
+    <a href="{% url 'home' %}" target="_blank" class="view-site">View Site &nearr;</a>
+    <div class="logout">
+      <a href="{% url 'dashboard_logout' %}">Log Out</a>
+    </div>
+  </aside>
+
+  <main class="dash-main">
+    <div class="dash-topbar-mobile">
+      <span class="brand-mini">admin@portfolio</span>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<script>
+  (function () {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    var toggle = document.getElementById('sidebarToggle');
+    if (!sidebar || !overlay || !toggle) return;
+    function close() { sidebar.classList.remove('open'); overlay.classList.remove('open'); }
+    toggle.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    });
+    overlay.addEventListener('click', close);
+  })();
+</script>
+
+{% include "portfolio/includes/doc_viewer_modal.html" %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.11.0/mammoth.browser.min.js"></script>
+<script src="{% static 'js/doc-viewer.js' %}"></script>
+</body>
+</html>

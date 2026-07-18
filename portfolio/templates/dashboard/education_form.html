@@ -1,0 +1,19 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Education Form{% endblock %}
+{% block content %}
+<div class="dash-topbar"><h1>{% if object %}Edit{% else %}Add{% endif %} Education</h1></div>
+<div class="panel">
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<div class="alert alert-error">{{ field.errors.0 }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'dashboard_education' %}" class="btn btn-outline">Cancel</a>
+  </form>
+</div>
+{% endblock %}

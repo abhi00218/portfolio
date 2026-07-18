@@ -1,0 +1,32 @@
+{% load static %}
+<!-- Gmail-style attachment preview modal: click "View" on any Word/PDF file to open it here -->
+<div class="docviewer-overlay" id="docviewerOverlay">
+    <div class="docviewer-box">
+        <div class="docviewer-topbar">
+            <div class="docviewer-title">
+                <i class="fas fa-file-alt"></i>
+                <span id="docviewerFileName">Document</span>
+            </div>
+            <div class="docviewer-actions">
+                <a href="#" id="docviewerDownloadBtn" class="docviewer-btn docviewer-btn-download" download>
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <button type="button" class="docviewer-btn docviewer-btn-close" id="docviewerCloseBtn" aria-label="Close preview">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="docviewer-body" id="docviewerBody">
+            <div class="docviewer-loading" id="docviewerLoading">
+                <div class="docviewer-spinner"></div>
+                <p>Loading preview&hellip;</p>
+            </div>
+            <div class="docviewer-docx-content" id="docviewerDocxContent" style="display:none;"></div>
+            <iframe id="docviewerFrame" class="docviewer-frame" style="display:none;" title="Document preview"></iframe>
+            <div class="docviewer-unsupported" id="docviewerUnsupported" style="display:none;">
+                <i class="fas fa-file-download"></i>
+                <p>A live preview isn't available for this file type.<br>Please use the Download button above to view it.</p>
+            </div>
+        </div>
+    </div>
+</div>

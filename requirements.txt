@@ -1,0 +1,9 @@
+Django>=6.0,<7.0
+Pillow>=11.0
+gunicorn>=23.0
+whitenoise>=6.7
+dj-database-url>=2.3
+
+# Only needed if you connect a Postgres database on Render (optional).
+# Uncomment the line below before deploying if you add one:
+# psycopg2-binary>=2.9

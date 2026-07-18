@@ -1,0 +1,105 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block title %}{{ project.title }} &mdash; {{ profile.full_name|default:"Portfolio" }}{% endblock %}
+
+{% block content %}
+
+<!-- Header Start -->
+<div class="slider-area">
+    <div class="slider-height2 project-hero d-flex align-items-center"{% if project.image %} style="background-image:url('{{ project.image.url }}');"{% endif %}>
+        {% if project.image %}<div class="project-hero-overlay"></div>{% endif %}
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap{% if project.image %} hero-cap-on-image{% endif %}">
+                        <h2>{{ project.title }}</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'project_list' %}">My Portfolio</a></li>
+                                <li class="breadcrumb-item"><a href="#">{{ project.title }}</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Services Details Start -->
+<div class="portfolio-details-area section-padding2" style="padding-top:100px;padding-bottom:120px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="details-caption pl-50">
+                    <h3>{{ project.title }}</h3>
+                    <p class="mb-30">{{ project.short_description }}</p>
+                    {% if project.description %}
+                    <p>{{ project.description|linebreaksbr }}</p>
+                    {% endif %}
+
+                    {% if project.tech_list %}
+                    <h3 class="mt-30">Tech Stack</h3>
+                    <div class="mb-30">
+                        {% for tech in project.tech_list %}<span class="tech-pill">{{ tech }}</span>{% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="hero__btn mt-10">
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" target="_blank" rel="noopener" class="btn hero-btn"><i class="fas fa-external-link-alt"></i> View Live</a>
+                        {% endif %}
+                        {% if project.github_url %}
+                        <a href="{{ project.github_url }}" target="_blank" rel="noopener" class="btn border-btn ml-15"><i class="fab fa-github"></i> Source Code</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="pl-50" style="padding-left:0;">
+                    {% if project.document_file %}
+                    <div style="background:#f7f7fd;border-radius:8px;padding:30px;margin-bottom:30px;">
+                        <h5 style="margin-bottom:10px;"><i class="fas fa-file-alt" style="color:#ec5b53;"></i> Project Document</h5>
+                        <p style="font-size:14px;color:#677294;margin-bottom:20px;">Read the full write-up of this project as a Word/PDF document.</p>
+                        <a href="#" class="btn header-btn js-doc-view d-block text-center mb-10" style="margin:0 0 10px 0;width:100%;"
+                           data-file-url="{{ project.document_file.url }}" data-file-name="{{ project.title }}">
+                            <i class="fas fa-eye"></i> View Document
+                        </a>
+                        <a href="{{ project.document_file.url }}" download class="border-btn d-block text-center" style="width:100%;margin:0;">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <ul class="project-meta-list">
+                        <li><span>Category</span><span>{{ project.tech_list|first|default:"Project" }}</span></li>
+                        <li><span>Published</span><span>{{ project.created_at|date:"M d, Y" }}</span></li>
+                        {% if project.live_url %}<li><span>Live Site</span><span><a href="{{ project.live_url }}" target="_blank" rel="noopener">Visit &rarr;</a></span></li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Services Details End -->
+
+<!-- Contact Info Start -->
+<section class="contact-info-area w-padding2" style="background-color:#0c1230;">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-xl-5 col-lg-7">
+                <div class="contact-caption mb-50">
+                    <h3 style="color:#fff;">If Not Now, When? Let&rsquo;s Work Together!</h3>
+                    <p style="color:#c5c5dd;">Have a similar project in mind? Let's talk about it.</p>
+                    <a href="{% url 'contact' %}" class="btn header-btn">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Info End -->
+
+{% endblock %}

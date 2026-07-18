@@ -1,0 +1,976 @@
+/* =========================================================
+   dynamic.css
+   Small additions layered on top of the original "master"
+   theme CSS. Nothing here overrides the original template —
+   it only styles the new dynamic bits: the document viewer
+   modal, skill bars, timeline, and a few utility helpers.
+   ========================================================= */
+
+/* ---------- Gmail-style document preview modal ---------- */
+.docviewer-overlay {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    inset: 0;
+    background: rgba(16, 20, 40, 0.72);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.docviewer-overlay.is-open {
+    display: flex;
+}
+
+.docviewer-box {
+    background: #fff;
+    width: 100%;
+    max-width: 950px;
+    height: 88vh;
+    max-height: 860px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    animation: docviewerPop .18s ease-out;
+}
+
+@keyframes docviewerPop {
+    from { transform: scale(.96); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.docviewer-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 22px;
+    background: #f6f6fb;
+    border-bottom: 1px solid #ececf5;
+    flex-shrink: 0;
+}
+
+.docviewer-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    color: #10285d;
+    font-size: 15px;
+    overflow: hidden;
+}
+
+.docviewer-title i { color: #ec5b53; font-size: 18px; }
+
+.docviewer-title span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.docviewer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.docviewer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 0;
+    cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all .2s ease;
+}
+
+.docviewer-btn-download {
+    background: #ec5b53;
+    color: #fff !important;
+}
+
+.docviewer-btn-download:hover { background: #e44239; color: #fff !important; }
+
+.docviewer-btn-close {
+    background: #eceef5;
+    color: #444 !important;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    padding: 0;
+}
+
+.docviewer-btn-close:hover { background: #e1e3ee; }
+
+.docviewer-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    background: #eef0f6;
+}
+
+.docviewer-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #676f8f;
+    font-family: "Rubik", sans-serif;
+}
+
+.docviewer-spinner {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 3px solid #d9deee;
+    border-top-color: #ec5b53;
+    animation: docviewerSpin .8s linear infinite;
+}
+
+@keyframes docviewerSpin { to { transform: rotate(360deg); } }
+
+.docviewer-docx-content {
+    height: 100%;
+    overflow-y: auto;
+    background: #fff;
+    padding: 50px 60px;
+    font-family: "Rubik", sans-serif;
+    color: #222;
+    line-height: 1.7;
+}
+
+.docviewer-docx-content img { max-width: 100%; height: auto; }
+
+.docviewer-frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+}
+
+.docviewer-unsupported {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #676f8f;
+    font-family: "Rubik", sans-serif;
+    padding: 20px;
+}
+
+.docviewer-unsupported i { font-size: 42px; color: #ec5b53; margin-bottom: 16px; }
+
+/* "View" trigger buttons used next to uploaded documents */
+.doc-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* ---------- Skills: proficiency bars ---------- */
+.skill-block { margin-bottom: 0; }
+.skill-block .skill-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    color: #000a2d;
+    margin-bottom: 10px;
+}
+.skill-block .skill-track {
+    background: #eef0f8;
+    border-radius: 30px;
+    height: 8px;
+    overflow: hidden;
+}
+.skill-block .skill-fill {
+    /* Note: previously this always rendered at width:0 because nothing
+       ever added a ".filled" class to trigger it. Rendering the target
+       width directly fixes the invisible/broken-looking progress bars. */
+    height: 100%;
+    width: var(--pct, 0%);
+    border-radius: 30px;
+    background: linear-gradient(90deg, #ec5b53, #ff8a65);
+    transition: width 1.1s ease;
+}
+
+/* ---------- Experience / Education timeline ---------- */
+.timeline { position: relative; padding-left: 34px; }
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #eceff8;
+}
+.timeline-item { position: relative; padding-bottom: 40px; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -34px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #ec5b53;
+}
+.timeline-item h4 { font-size: 20px; font-weight: 700; color: #000a2d; margin-bottom: 4px; }
+.timeline-item .timeline-sub { color: #ec5b53; font-weight: 500; margin-bottom: 6px; display: block; }
+.timeline-item .timeline-date { color: #9696a7; font-size: 13px; display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.timeline-item p { color: #677294; margin-bottom: 0; }
+
+/* ---------- Project card ---------- */
+/* Image lives in its own fixed-height thumbnail strip and the text/tags/
+   buttons live in a separate padded body below it. Keeping the two apart
+   is what stops an uploaded project image (which may already contain its
+   own bold text/graphics) from colliding with the card's own title, tags
+   and buttons. */
+.portfolio-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 10, 45, 0.08);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+.portfolio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 44px rgba(0, 10, 45, 0.16);
+}
+.portfolio-card-thumb {
+    position: relative;
+    width: 100%;
+    height: 230px;
+    overflow: hidden;
+    background: #0c1230;
+    flex-shrink: 0;
+}
+.portfolio-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .45s ease;
+}
+.portfolio-card:hover .portfolio-card-thumb img { transform: scale(1.07); }
+
+.portfolio-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 26px 26px 24px;
+}
+.portfolio-card-body .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+.portfolio-card-body .tech-tags span {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    color: #ec5b53;
+    background: rgba(236, 91, 83, 0.1);
+    padding: 4px 11px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.portfolio-card-body h5 { font-size: 19px; margin-bottom: 8px; line-height: 1.35; }
+.portfolio-card-body h5 a { color: #000a2d; transition: color .2s ease; }
+.portfolio-card-body h5 a:hover { color: #ec5b53; }
+.portfolio-card-body p {
+    color: #677294;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.portfolio-card-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto;
+}
+.portfolio-card-actions .border-btn {
+    padding: 11px 22px !important;
+    font-size: 13px;
+    line-height: 1;
+}
+.doc-view-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: "Rubik", sans-serif;
+    color: #ec5b53 !important;
+    background: rgba(236, 91, 83, 0.08);
+    border: 1px solid rgba(236, 91, 83, 0.35);
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all .2s ease;
+    white-space: nowrap;
+}
+.doc-view-trigger:hover {
+    background: #ec5b53;
+    color: #fff !important;
+    border-color: #ec5b53;
+}
+
+/* Featured project: stands out from the rest of the grid */
+.portfolio-card-featured {
+    box-shadow: 0 14px 34px rgba(236, 91, 83, 0.22);
+    border: 1px solid rgba(236, 91, 83, 0.35);
+}
+.portfolio-card-featured:hover {
+    box-shadow: 0 24px 48px rgba(236, 91, 83, 0.3);
+}
+.featured-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ec5b53, #ff8a65);
+    color: #fff;
+    font-family: "Rubik", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    box-shadow: 0 6px 16px rgba(236, 91, 83, 0.45);
+}
+.featured-badge i { font-size: 11px; }
+
+/* ---------- Project detail hero: shows the project's own image ---------- */
+.project-hero {
+    position: relative;
+    min-height: 420px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.project-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 10, 45, 0.55) 0%, rgba(0, 10, 45, 0.78) 100%);
+}
+.project-hero .hero-cap-on-image { position: relative; z-index: 1; }
+.project-hero .hero-cap-on-image h2 { color: #fff; }
+.project-hero .hero-cap-on-image .breadcrumb-item a,
+.project-hero .hero-cap-on-image .breadcrumb-item.active { color: #f2d3d1; }
+.project-hero .hero-cap-on-image .breadcrumb-item + .breadcrumb-item::before { color: #f2d3d1; }
+
+.project-meta-list { list-style: none; padding: 0; margin: 0 0 30px 0; }
+.project-meta-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #eceff8;
+    font-family: "Rubik", sans-serif;
+}
+.project-meta-list li span:first-child { color: #9696a7; }
+.project-meta-list li span:last-child { color: #000a2d; font-weight: 500; text-align: right; }
+
+.tech-pill {
+    display: inline-block;
+    background: #f5f5fd;
+    color: #ec5b53;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 0 8px 8px 0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9696a7;
+    font-family: "Rubik", sans-serif;
+}
+
+/* Message unread badge in nothing-fancy dashboard-agnostic contexts */
+.badge-unread {
+    background: #ec5b53;
+    color: #fff;
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 11px;
+    margin-left: 6px;
+}
+
+/* =========================================================
+   Header: logo mark (monogram + brand word), shorter height
+   ========================================================= */
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+    line-height: 1;
+}
+.brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #ec5b53, #ff8a65);
+    color: #fff !important;
+    font-family: "Rufina", serif;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: 0 8px 18px rgba(236, 91, 83, 0.35);
+}
+.brand-name {
+    font-family: "Rufina", serif;
+    font-weight: 700;
+    font-size: 21px;
+    color: #000a2d !important;
+    letter-spacing: .3px;
+}
+
+.main-header .main-menu ul li a {
+    padding: 22px 10px !important;
+}
+
+.header-sticky.sticky-bar .main-menu ul > li > a {
+    padding: 16px 13px !important;
+}
+
+.header-right-btn .btn.header-btn {
+    padding: 16px 22px !important;
+}
+
+/* =========================================================
+   Hamburger trigger (mobile)
+   ========================================================= */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 14px;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #000a2d;
+    border-radius: 2px;
+}
+
+@media (max-width: 991px) {
+    .mobile-menu-toggle { display: flex; }
+}
+
+/* =========================================================
+   Off-canvas mobile menu — slides in from the right
+   ========================================================= */
+.offcanvas-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 8, 30, 0.55);
+    z-index: 99990;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease;
+}
+
+.offcanvas-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.offcanvas-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 300px;
+    max-width: 85vw;
+    background: #fff;
+    z-index: 99991;
+    transform: translateX(100%);
+    transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: -12px 0 30px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 26px;
+}
+
+.offcanvas-menu.is-open {
+    transform: translateX(0);
+}
+
+.offcanvas-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f7;
+}
+
+.offcanvas-logo {
+    font-family: "Rufina", serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: #000a2d;
+}
+
+.offcanvas-close {
+    border: 0;
+    background: #f5f5fd;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #464d65;
+    flex-shrink: 0;
+}
+
+.offcanvas-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.offcanvas-nav li {
+    border-bottom: 1px solid #f0f0f7;
+}
+
+.offcanvas-nav li a {
+    display: block;
+    padding: 15px 4px;
+    color: #000a2d;
+    font-weight: 500;
+    font-size: 16px;
+    font-family: "Rubik", sans-serif;
+}
+
+.offcanvas-nav li a:hover {
+    color: #ec5b53;
+}
+
+.offcanvas-cta {
+    margin-top: auto;
+    text-align: center;
+}
+
+body.offcanvas-open {
+    overflow: hidden;
+}
+
+/* =========================================================
+   Hero: real photo + shorter section (fits without scrolling)
+   ========================================================= */
+.hero-with-photo {
+    background-image: none !important;
+    background-color: #e5e9ee;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-photo {
+    position: absolute;
+    right: 5%;
+    bottom: 0;
+    top: 0;
+    display: flex;
+    align-items: flex-end;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-photo img {
+    max-height: 92%;
+    width: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 991px) {
+    .hero-photo { display: none; }
+}
+
+.slider-height {
+    min-height: 620px !important;
+}
+
+@media (min-width: 1200px) and (max-width: 1600px) {
+    .slider-height { min-height: 560px !important; }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .slider-height { min-height: 520px !important; }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .slider-height { min-height: auto !important; padding: 70px 0; }
+}
+
+@media (max-width: 575px) {
+    .slider-height { min-height: auto !important; padding: 60px 0; }
+}
+
+/* =========================================================
+   REDESIGN PASS — blog cards, skill cards, experience/education
+   cards, CTA button alignment, and hero photo treatment.
+   ========================================================= */
+
+/* ---------- 1) Blog preview cards: equal height + real card design ---------- */
+#blog .row { display: flex; flex-wrap: wrap; }
+#blog .row > [class*="col-"] { display: flex; }
+
+.blog-card-v2 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 10, 45, 0.06);
+    border: 1px solid #f0f1f7;
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.blog-card-v2:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 10, 45, 0.12);
+}
+
+.blog-card-v2 .thumb {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: #eef0f8;
+}
+
+.blog-card-v2 .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .5s ease;
+}
+
+.blog-card-v2:hover .thumb img { transform: scale(1.08); }
+
+.blog-card-v2 .single-blog-content {
+    padding: 24px 26px 26px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.blog-card-v2 .date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #ec5b53;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.blog-card-v2 h4 {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+    flex: 1;
+}
+
+.blog-card-v2 h4 a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #000a2d;
+}
+
+.blog-card-v2 h4 a:hover { color: #ec5b53; }
+
+.blog-card-v2 .blog-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ec5b53;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f2f2f8;
+}
+
+.blog-card-v2 .blog-read-more i { transition: transform .25s ease; font-size: 12px; }
+.blog-card-v2:hover .blog-read-more i { transform: translateX(4px); }
+
+/* ---------- 2) Experience / Education: card-style timeline ---------- */
+.timeline { position: relative; padding-left: 0; }
+.timeline::before { display: none; }
+
+.timeline-item {
+    position: relative;
+    background: #fff;
+    border: 1px solid #eef0f8;
+    border-left: 4px solid #ec5b53;
+    border-radius: 14px;
+    padding: 28px 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(0, 10, 45, 0.05);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0, 10, 45, 0.1);
+}
+
+.timeline-item::before { display: none; }
+
+.timeline-item .timeline-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff4f4;
+    color: #ec5b53;
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.timeline-item h4 { font-size: 19px; font-weight: 700; color: #000a2d; margin-bottom: 4px; }
+.timeline-item .timeline-sub { color: #ec5b53; font-weight: 500; margin-bottom: 8px; display: block; font-size: 14px; }
+.timeline-item .timeline-date {
+    display: inline-block;
+    color: #9696a7;
+    background: #f7f7fc;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.timeline-item p { color: #677294; margin-bottom: 0; line-height: 1.7; }
+
+/* ---------- 3) Skill cards: fixed icon badges + tidy layout ---------- */
+.categories-area .single-cat {
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 10, 45, 0.05);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    padding: 46px 28px 38px;
+}
+
+.categories-area .single-cat:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 34px rgba(0, 10, 45, 0.1);
+    border-color: transparent;
+}
+
+.skill-badge {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 26px;
+    box-shadow: 0 10px 22px rgba(0, 10, 45, 0.12);
+}
+
+.skill-badge span {
+    color: #fff;
+    font-family: "Rufina", serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.skill-badge.grad-a { background: linear-gradient(135deg, #ec5b53, #ff8a65); }
+.skill-badge.grad-b { background: linear-gradient(135deg, #5b8def, #7c5cff); }
+.skill-badge.grad-c { background: linear-gradient(135deg, #12b886, #3ddc97); }
+.skill-badge.grad-d { background: linear-gradient(135deg, #f6a609, #ffcf5c); }
+
+.skill-category-pill {
+    display: inline-block;
+    background: #f5f5fd;
+    color: #7c5cff;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+
+.categories-area .single-cat .cat-cap h5 > a { margin-bottom: 18px; font-size: 21px; }
+
+.skill-percent-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.skill-percent-row .skill-track { flex: 1; }
+
+.skill-percent-row .skill-percent {
+    color: #000a2d;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: "Rubik", sans-serif;
+    min-width: 36px;
+    text-align: right;
+}
+
+/* ---------- 4) CTA button rows: consistent height + alignment ---------- */
+.cta-btn-row,
+.hero__btn {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.cta-btn-row .btn,
+.cta-btn-row .border-btn,
+.hero__btn .btn,
+.hero__btn .border-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin: 0 !important;
+    padding: 18px 32px !important;
+    line-height: 1.15 !important;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.cta-btn-row .btn i,
+.cta-btn-row .border-btn i,
+.hero__btn .btn i,
+.hero__btn .border-btn i {
+    font-size: 13px;
+    position: relative;
+    top: 0;
+}
+
+/* ---------- 5) Hero: framed photo + decorative backdrop so any photo looks intentional ---------- */
+.hero-with-photo {
+    background-image:
+        radial-gradient(circle at 85% 20%, rgba(236, 91, 83, 0.07) 0, transparent 45%),
+        radial-gradient(circle at 10% 85%, rgba(124, 92, 255, 0.06) 0, transparent 40%) !important;
+}
+
+.hero-photo {
+    right: 6%;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    align-items: center;
+    width: 380px;
+    height: 460px;
+}
+
+.hero-photo::before {
+    content: "";
+    position: absolute;
+    top: -26px;
+    right: -30px;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ec5b53, #ff8a65);
+    border-radius: 32px;
+    z-index: 0;
+    opacity: .9;
+}
+
+.hero-photo::after {
+    content: "";
+    position: absolute;
+    bottom: -22px;
+    left: -26px;
+    width: 130px;
+    height: 130px;
+    border: 10px solid rgba(124, 92, 255, 0.18);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.hero-photo img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 28px;
+    object-fit: cover;
+    box-shadow: 0 30px 60px rgba(0, 10, 45, 0.22);
+    border: 8px solid #fff;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .hero-photo { width: 320px; height: 400px; }
+}
+
+@media (max-width: 991px) {
+    .hero-photo { display: none; }
+}

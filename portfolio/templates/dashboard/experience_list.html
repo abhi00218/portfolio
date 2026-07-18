@@ -1,0 +1,30 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Experience{% endblock %}
+{% block content %}
+<div class="dash-topbar">
+  <h1>Experience</h1>
+  <a href="{% url 'dashboard_experience_add' %}" class="btn btn-primary">+ Add Experience</a>
+</div>
+<div class="panel">
+  {% if object_list %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Role</th><th>Company</th><th>Duration</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for exp in object_list %}
+      <tr>
+        <td>{{ exp.role }}</td>
+        <td>{{ exp.company }}</td>
+        <td>{{ exp.start_date|date:"M Y" }} — {% if exp.currently_working %}Present{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}</td>
+        <td class="actions">
+          <a href="{% url 'dashboard_experience_edit' exp.pk %}" class="btn btn-outline btn-sm">Edit</a>
+          <a href="{% url 'dashboard_experience_delete' exp.pk %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state">No experience entries yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

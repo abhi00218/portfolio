@@ -1,0 +1,38 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<div class="dash-topbar">
+  <h1>Overview</h1>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="num">{{ skills_count }}</div><div class="label">Skills</div></div>
+  <div class="stat-card"><div class="num">{{ projects_count }}</div><div class="label">Projects</div></div>
+  <div class="stat-card"><div class="num">{{ experience_count }}</div><div class="label">Experience entries</div></div>
+  <div class="stat-card"><div class="num">{{ education_count }}</div><div class="label">Education entries</div></div>
+  <div class="stat-card"><div class="num">{{ posts_count }}</div><div class="label">Blog posts</div></div>
+  <div class="stat-card"><div class="num">{{ unread_messages }}</div><div class="label">Unread messages</div></div>
+</div>
+
+<div class="panel">
+  <h3 style="margin-top:0;">Recent Messages</h3>
+  {% if recent_messages %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Received</th></tr></thead>
+    <tbody>
+      {% for m in recent_messages %}
+      <tr>
+        <td>{{ m.name }}</td>
+        <td>{{ m.email }}</td>
+        <td>{{ m.subject|default:"—" }}</td>
+        <td>{{ m.created_at|date:"M j, Y H:i" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  <a href="{% url 'dashboard_messages' %}" class="btn btn-outline btn-sm" style="margin-top:16px;">View all messages</a>
+  {% else %}
+  <div class="empty-state">No messages yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

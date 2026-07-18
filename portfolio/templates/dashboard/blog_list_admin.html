@@ -1,0 +1,30 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Blog Posts{% endblock %}
+{% block content %}
+<div class="dash-topbar">
+  <h1>Blog Posts</h1>
+  <a href="{% url 'dashboard_blog_add' %}" class="btn btn-primary">+ Add Post</a>
+</div>
+<div class="panel">
+  {% if object_list %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Title</th><th>Published</th><th>Created</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for post in object_list %}
+      <tr>
+        <td>{{ post.title }}</td>
+        <td>{% if post.is_published %}<span class="badge badge-yes">Yes</span>{% else %}<span class="badge badge-no">No</span>{% endif %}</td>
+        <td>{{ post.created_at|date:"M j, Y" }}</td>
+        <td class="actions">
+          <a href="{% url 'dashboard_blog_edit' post.pk %}" class="btn btn-outline btn-sm">Edit</a>
+          <a href="{% url 'dashboard_blog_delete' post.pk %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state">No blog posts yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

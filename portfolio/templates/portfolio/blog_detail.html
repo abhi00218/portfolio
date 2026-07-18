@@ -1,0 +1,77 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block title %}{{ post.title }} &mdash; {{ profile.full_name|default:"Portfolio" }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Start -->
+<div class="slider-area">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap">
+                        <h2>Blog Details</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'blog_list' %}">Blog</a></li>
+                                <li class="breadcrumb-item"><a href="#">{{ post.title }}</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<section class="blog_area single-post-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 posts-list">
+                <div class="single-post">
+                    {% if post.image %}
+                    <div class="feature-img">
+                        <img class="img-fluid" src="{{ post.image.url }}" alt="{{ post.title }}">
+                    </div>
+                    {% endif %}
+                    <div class="blog_details">
+                        <h2>{{ post.title }}</h2>
+                        <ul class="blog-info-link mt-3 mb-4">
+                            <li><a href="#"><i class="fa fa-user"></i> {{ profile.full_name|default:"Admin" }}</a></li>
+                            <li><a href="#"><i class="fa fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}</a></li>
+                        </ul>
+                        {{ post.content|linebreaks }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    {% if recent_posts %}
+                    <aside class="single_sidebar_widget post_category_widget">
+                        <h4 class="widget_title">Recent Posts</h4>
+                        <ul class="list cat-list">
+                            {% for rp in recent_posts %}
+                            <li>
+                                <a href="{{ rp.get_absolute_url }}" class="d-flex">
+                                    <p>{{ rp.title }}</p>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                    {% endif %}
+
+                    <aside class="single_sidebar_widget">
+                        <a href="{% url 'contact' %}" class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" style="text-align:center;display:block;">Get In Touch</a>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

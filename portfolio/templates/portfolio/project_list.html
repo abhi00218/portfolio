@@ -1,0 +1,94 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block title %}My Portfolio &mdash; {{ profile.full_name|default:"Portfolio" }}{% endblock %}
+
+{% block content %}
+
+<!-- Header Start -->
+<div class="slider-area">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap">
+                        <h2>My Portfolio</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'project_list' %}">My Portfolio</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Projects Grid Start -->
+<section class="services-area services-padding">
+    <div class="container">
+        <div class="project-heading mb-35">
+            <div class="row align-items-end">
+                <div class="col-lg-8">
+                    <div class="section-tittle">
+                        <h2>Everything I&rsquo;ve Built</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for project in projects %}
+            <div class="col-lg-4 col-md-6 mb-30">
+                <div class="portfolio-card{% if project.featured %} portfolio-card-featured{% endif %}">
+                    <div class="portfolio-card-thumb">
+                        {% if project.featured %}<span class="featured-badge"><i class="fas fa-star"></i> Featured</span>{% endif %}
+                        {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                        {% else %}
+                        <img src="{% static 'master/assets/img/service/services2.png' %}" alt="{{ project.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="portfolio-card-body">
+                        <div class="tech-tags">
+                            {% for tech in project.tech_list %}<span>{{ tech }}</span>{% endfor %}
+                        </div>
+                        <h5><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h5>
+                        <p>{{ project.short_description }}</p>
+                        <div class="portfolio-card-actions">
+                            <a href="{{ project.get_absolute_url }}" class="border-btn">View Details</a>
+                            {% if project.document_file %}
+                            <a href="#" class="doc-view-trigger js-doc-view" data-file-url="{{ project.document_file.url }}" data-file-name="{{ project.title }}"><i class="fas fa-eye"></i> View Doc</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="empty-state">No projects have been added yet. They'll show up here once added from the dashboard.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Projects Grid End -->
+
+<!-- Contact Info Start -->
+<section class="contact-info-area w-padding2" style="background-color:#0c1230;">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-xl-5 col-lg-7">
+                <div class="contact-caption mb-50">
+                    <h3 style="color:#fff;">If Not Now, When? Let&rsquo;s Work Together!</h3>
+                    <p style="color:#c5c5dd;">Like what you see? Let's talk about your next project.</p>
+                    <a href="{% url 'contact' %}" class="btn header-btn">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Info End -->
+
+{% endblock %}

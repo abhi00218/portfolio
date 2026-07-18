@@ -1,0 +1,203 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}{{ profile.full_name|default:"Portfolio" }} &mdash; {{ profile.tagline|default:"Personal Portfolio" }}{% endblock %}</title>
+    <meta name="description" content="{{ profile.tagline|default:'Personal portfolio' }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'master/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/slicknav.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'master/assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dynamic.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+<!-- Preloader Start -->
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="preloader-circle"></div>
+            <div class="preloader-img pere-text">
+                <img src="{% static 'master/assets/img/logo/loder.jpg' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Preloader End -->
+
+<header>
+    <div class="header-area">
+        <div class="main-header header-sticky">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-6">
+                        <div class="logo">
+                            <a href="{% url 'home' %}" class="brand-logo">
+                                <span class="brand-mark">{{ profile.full_name|default:"P"|slice:":1" }}</span>
+                                <span class="brand-name">Portfolio</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-10 col-md-9 col-6">
+                        <div class="menu-main d-flex align-items-center justify-content-end">
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="{% url 'home' %}">Home</a></li>
+                                        <li><a href="{% url 'about' %}">About</a></li>
+                                        <li><a href="{% url 'home' %}#skills">Skills</a></li>
+                                        <li><a href="{% url 'project_list' %}">Portfolio</a></li>
+                                        <li><a href="#">Page</a>
+                                            <ul class="submenu">
+                                                <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                                                <li><a href="{% url 'home' %}#experience">Experience</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="header-right-btn f-right d-none d-xl-block ml-20">
+                                {% if profile.resume_file %}
+                                <a href="#" class="btn header-btn js-doc-view" data-file-url="{{ profile.resume_file.url }}" data-file-name="{{ profile.full_name }} - Resume">View Resume</a>
+                                {% else %}
+                                <a href="{% url 'contact' %}" class="btn header-btn">Get In Touch</a>
+                                {% endif %}
+                            </div>
+                            <button type="button" class="mobile-menu-toggle d-lg-none" id="mobileMenuToggle" aria-label="Open menu">
+                                <span></span><span></span><span></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% if messages %}
+<div class="container" style="padding-top:20px;">
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}" style="padding:15px 20px;border-radius:5px;margin-bottom:10px;{% if message.tags == 'success' %}background:#e8f8ee;color:#1e7e42;border:1px solid #b7e6c6;{% else %}background:#fdeaea;color:#b02a2a;border:1px solid #f3b9b9;{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer>
+    <div class="footer-area">
+        <div class="container">
+            <div class="footer-top footer-padding">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="footer-top-cap text-center">
+                            <img src="{% static 'master/assets/img/logo/logo2_footer.png' %}" alt="">
+                            <span><a href="mailto:{{ profile.email }}">{{ profile.email|default:"hello@portfolio.com" }}</a></span>
+                            {% if profile.location %}<p>{{ profile.location }}</p>{% endif %}
+                            {% if profile.phone %}<p>{{ profile.phone }}</p>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="footer-copy-right">
+                            <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> {{ profile.full_name|default:"Portfolio" }}. All rights reserved.</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="footer-social f-right">
+                            <a>Stay Connected</a>
+                            {% if profile.twitter_url %}<a href="{{ profile.twitter_url }}" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>{% endif %}
+                            {% if profile.github_url %}<a href="{{ profile.github_url }}" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>{% endif %}
+                            {% if profile.linkedin_url %}<a href="{{ profile.linkedin_url }}" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+                            {% if profile.instagram_url %}<a href="{{ profile.instagram_url }}" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scroll Up -->
+<div id="back-top">
+    <a title="Go to Top" href="#"><i class="fas fa-level-up-alt"></i></a>
+</div>
+
+<!-- ===== Off-canvas mobile menu (slides in from the right) ===== -->
+<div class="offcanvas-overlay" id="offcanvasOverlay"></div>
+<aside class="offcanvas-menu" id="offcanvasMenu">
+    <div class="offcanvas-head">
+        <a href="{% url 'home' %}" class="offcanvas-logo brand-logo">
+            <span class="brand-mark">{{ profile.full_name|default:"P"|slice:":1" }}</span>
+            <span class="brand-name">Portfolio</span>
+        </a>
+        <button type="button" class="offcanvas-close" id="offcanvasClose" aria-label="Close menu"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="offcanvas-nav">
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'home' %}#skills">Skills</a></li>
+            <li><a href="{% url 'project_list' %}">Portfolio</a></li>
+            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+            <li><a href="{% url 'home' %}#experience">Experience</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+    </nav>
+    {% if profile.resume_file %}
+    <a href="#" class="btn header-btn js-doc-view offcanvas-cta" data-file-url="{{ profile.resume_file.url }}" data-file-name="{{ profile.full_name }} - Resume">View Resume</a>
+    {% else %}
+    <a href="{% url 'contact' %}" class="btn header-btn offcanvas-cta">Get In Touch</a>
+    {% endif %}
+</aside>
+
+<!-- ===== Document Viewer Modal (Gmail-style attachment preview) ===== -->
+{% include "portfolio/includes/doc_viewer_modal.html" %}
+
+<!-- JS here -->
+<script src="{% static 'master/assets/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+<script src="{% static 'master/assets/js/vendor/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'master/assets/js/popper.min.js' %}"></script>
+<script src="{% static 'master/assets/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.slicknav.min.js' %}"></script>
+<script src="{% static 'master/assets/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'master/assets/js/slick.min.js' %}"></script>
+<script src="{% static 'master/assets/js/wow.min.js' %}"></script>
+<script src="{% static 'master/assets/js/animated.headline.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.magnific-popup.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.sticky.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.form.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'master/assets/js/jquery.ajaxchimp.min.js' %}"></script>
+<script src="{% static 'master/assets/js/plugins.js' %}"></script>
+<script src="{% static 'master/assets/js/main.js' %}"></script>
+
+<!-- Mammoth.js: converts .docx to HTML client-side for in-browser preview -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.11.0/mammoth.browser.min.js"></script>
+<script src="{% static 'js/doc-viewer.js' %}"></script>
+<script src="{% static 'js/mobile-nav.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

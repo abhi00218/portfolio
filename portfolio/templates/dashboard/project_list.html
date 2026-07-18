@@ -1,0 +1,31 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+<div class="dash-topbar">
+  <h1>Projects</h1>
+  <a href="{% url 'dashboard_project_add' %}" class="btn btn-primary">+ Add Project</a>
+</div>
+<div class="panel">
+  {% if object_list %}
+  <div class="table-scroll"><table class="data-table">
+    <thead><tr><th>Title</th><th>Live Link</th><th>Document</th><th>Featured</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for project in object_list %}
+      <tr>
+        <td>{{ project.title }}</td>
+        <td>{% if project.live_url %}<a href="{{ project.live_url }}" target="_blank">Open ↗</a>{% else %}—{% endif %}</td>
+        <td>{% if project.document_file %}<a href="#" class="js-doc-view" data-file-url="{{ project.document_file.url }}" data-file-name="{{ project.title }}">View</a> &middot; <a href="{{ project.document_file.url }}" download>Download</a>{% else %}—{% endif %}</td>
+        <td>{% if project.featured %}<span class="badge badge-yes">Yes</span>{% else %}<span class="badge badge-no">No</span>{% endif %}</td>
+        <td class="actions">
+          <a href="{% url 'dashboard_project_edit' project.pk %}" class="btn btn-outline btn-sm">Edit</a>
+          <a href="{% url 'dashboard_project_delete' project.pk %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty-state">No projects added yet. Click "Add Project" to get started.</div>
+  {% endif %}
+</div>
+{% endblock %}
