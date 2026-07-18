@@ -16,6 +16,12 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CLOUDINARY_STORAGE = {
+       'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+       'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+       'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+   }
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -49,14 +55,16 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'portfolio',
-]
+       'django.contrib.admin',
+       'django.contrib.auth',
+       'django.contrib.contenttypes',
+       'django.contrib.sessions',
+       'django.contrib.messages',
+       'cloudinary_storage',
+       'django.contrib.staticfiles',
+       'cloudinary',
+       'portfolio',
+   ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -142,13 +150,13 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-    },
-}
+       "default": {
+           "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+       },
+       "staticfiles": {
+           "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+       },
+   }
 
 # Media files (user uploads: profile photo, resume, project images/docs)
 MEDIA_URL = 'media/'
